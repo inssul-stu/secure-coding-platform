@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}회원가입{% endblock %}
+{% block content %}
+<h2>회원가입</h2>
+<form method="post">
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+  사용자명:
+  <input type="text" name="username" required minlength="3" maxlength="20" pattern="[a-zA-Z0-9_]+" title="영문, 숫자, 밑줄만 허용"><br>
+
+  비밀번호:
+  <input type="password" name="password" required minlength="8" maxlength="30"><br>
+
+  <button type="submit">회원가입</button>
+</form>
+{% endblock %}

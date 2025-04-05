@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}대시보드{% endblock %}
+{% block content %}
+<h2>대시보드</h2>
+<h3>등록된 상품</h3>
+<ul>
+  {% for product in products %}
+    <li>
+      <a href="{{ url_for('view_product', product_id=product.id) }}">{{ product.title | e }}</a>
+      - 가격: {{ product.price | e }}
+    </li>
+  {% endfor %}
+</ul>
+<p><a href="{{ url_for('new_product') }}">새 상품 등록</a></p>
+
+<form action="{{ url_for('search') }}" method="get">
+  <input type="text" name="q" placeholder="상품 검색...">
+  <button type="submit">검색</button>
+</form>
+
+<h3>실시간 채팅</h3>
+<ul id="messages"></ul>
+<input id="recipient_input" type="text" placeholder="수신자 (비우면 전체채팅)">
+<input id="chat_input" type="text" placeholder="메시지를 입력하세요">
+<button onclick="sendMessage()">전송</button>
+
+<script type="text/javascript">
+  var socket = io();
+
+  socket.on('connect', function() {
+    console.log("채팅 서버에 연결됨");
+  });
+
+  socket.on('message', function(data) {
+    var messages = document.getElementById('messages');
+    var item = document.createElement('li');
+    item.textContent = data.username + ": " + data.message;
+    messages.appendChild(item);
+  });
+
+  socket.on('private_message', function(data) {
+    var messages = document.getElementById('messages');
+    var item = document.createElement('li');
+    item.textContent = "[귓속말] " + data.sender + ": " + data.message;
+    messages.appendChild(item);
+  });
+
+  function sendMessage() {
+    var message = document.getElementById('chat_input').value.trim();
+    var recipient = document.getElementById('recipient_input').value.trim();
+    if (!message) return;
+
+    if (recipient) {
+      socket.emit('private_message', {
+        recipient: recipient,
+        message: message
+      });
+    } else {
+      socket.emit('send_message', {
+        username: "{{ user.username }}",
+        message: message
+      });
+    }
+
+    document.getElementById('chat_input').value = '';
+  }
+</script>
+
+<p>{{ user['username'] | e }}님의 현재 포인트: {{ user['points'] | e }}점</p>
+<a href="{{ url_for('transfer') }}">포인트 송금하기</a>
+
+{% endblock %}

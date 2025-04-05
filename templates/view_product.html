@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}상품 상세보기{% endblock %}
+
+{% block content %}
+  <h2>{{ product.title }}</h2>
+  <p>{{ product.description }}</p>
+  <p>가격: {{ product.price }}</p>
+  <p>판매자: {{ seller.username if seller else '알 수 없음' }}</p>
+
+  {% if session['user_id'] == product['seller_id'] %}
+    <form action="{{ url_for('delete_product', product_id=product['id']) }}" method="POST" onsubmit="return confirm('정말 삭제하시겠습니까?');">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <button type="submit">상품 삭제</button>
+    </form>
+
+    <form method="POST" action="{{ url_for('edit_product', product_id=product['id']) }}">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+        <input name="title" value="{{ product['title'] }}">
+        <textarea name="description">{{ product['description'] }}</textarea>
+        <input name="price" value="{{ product['price'] }}">
+        <button type="submit">수정하기</button>
+      </form>
+  {% endif %}
+{% endblock %}

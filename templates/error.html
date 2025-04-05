@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% block title %}에러 {{ code }}{% endblock %}
+{% block content %}
+  <h2>에러 {{ code }}</h2>
+  <p>{{ message }}</p>
+  <a href="{{ url_for('index') }}">메인으로 돌아가기</a>
+{% endblock %}

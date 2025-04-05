@@ -1,0 +1,56 @@
+<h2>신고 내역</h2>
+<ul>
+  {% for r in reports %}
+    <li>{{ r['target_name'] | e }} - 사유: {{ r['reason'] | e }}</li>
+  {% endfor %}
+</ul>
+
+<h2>차단된 사용자</h2>
+<ul>
+    {% for u in blocked_users %}
+      <li>
+        {{ u['username']}} (ID: {{ u['id']}})
+        <form method="POST" action="{{ url_for('unblock_user', user_id=u['id']) }}" style="display:inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit">차단 해제</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+<h2>차단된 상품</h2>
+<ul>
+    {% for p in blocked_products %}
+      <li>
+        {{ p['title'] | e }} - 가격: {{ p['price'] | e }}
+        <form method="POST" action="{{ url_for('unblock_product', product_id=p['id']) }}" style="display:inline;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <button type="submit">차단 해제</button>
+        </form>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <h2>최근 채팅 로그 (100건)</h2>
+<table border="1" cellspacing="0" cellpadding="5">
+  <thead>
+    <tr>
+      <th>시간</th>
+      <th>보낸 사람</th>
+      <th>받는 사람</th>
+      <th>메시지</th>
+      <th>타입</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for log in chat_logs %}
+      <tr>
+        <td>{{ log['timestamp'] }}</td>
+        <td>{{ log['sender'] }}</td>
+        <td>{{ log['recipient'] or '전체' }}</td>
+        <td>{{ log['message'] }}</td>
+        <td>{{ log['type'] }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>

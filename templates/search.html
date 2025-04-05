@@ -1,0 +1,15 @@
+<h2>"{{ query }}"에 대한 검색 결과</h2>
+{% if products %}
+  <ul>
+    {% for product in products %}
+      <li>
+        <a href="{{ url_for('view_product', product_id=product['id']) }}">
+          {{ product['title'] | e }}
+        </a>
+        - 가격: {{ product['price'] | e }}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>검색된 상품이 없습니다.</p>
+{% endif %}
