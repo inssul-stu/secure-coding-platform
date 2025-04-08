@@ -23,6 +23,6 @@ conda env create -f enviroments.yaml
 run the server process.
 
 ```
-python app.py
+python app.py or python3 app.py
 ```
 
