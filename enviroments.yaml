@@ -8,3 +8,6 @@ dependencies:
     - flask 
     - flask-socketio
     - flask-sqlalchemy
+    - flask-wtf  # CSRF 보호를 위해 추가
+    - eventlet
+    - werkzeug

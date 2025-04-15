@@ -16,6 +16,7 @@ if you don't have a miniconda(or anaconda), you can install it on this url. - ht
 ```
 git clone https://github.com/inssul-stu/secure-coding-platform.git
 conda env create -f enviroments.yaml
+conda activate secure_conding
 ```
 
 ## usage
